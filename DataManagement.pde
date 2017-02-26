@@ -3,7 +3,73 @@ PlayerEntry[] topFive = new PlayerEntry[5];
 void loadColorScheme() {
   JSONObject colors;
   try {
-    colors = loadJSONObject("colors.json");
+    colors = loadJSONObject("config/colors.json");
+
+
+    if (!colors.isNull("backgroundColor")) {
+      JSONObject col = colors.getJSONObject("backgroundColor");
+
+      float r = col.getFloat("r");
+      float g = col.getFloat("g");
+      float b = col.getFloat("b");
+      float a = col.getFloat("a");
+
+      bgColor = color(r, g, b, a);
+    } else {
+      bgColor = color(15, 1, 9);
+    }
+
+    if (!colors.isNull("shipColor")) {
+      JSONObject col = colors.getJSONObject("shipColor");
+
+      float r = col.getFloat("r");
+      float g = col.getFloat("g");
+      float b = col.getFloat("b");
+      float a = col.getFloat("a");
+
+      shipColor = color(r, g, b, a);
+    } else {
+      shipColor = color(255, 255, 255);
+    }
+
+    if (!colors.isNull("asteroidColor")) {
+      JSONObject col = colors.getJSONObject("asteroidColor");
+
+      float r = col.getFloat("r");
+      float g = col.getFloat("g");
+      float b = col.getFloat("b");
+      float a = col.getFloat("a");
+
+      asteroidColor = color(r, g, b, a);
+    } else {
+      asteroidColor = color(255, 255, 255);
+    }
+
+    if (!colors.isNull("laserColor")) {
+      JSONObject col = colors.getJSONObject("laserColor");
+
+      float r = col.getFloat("r");
+      float g = col.getFloat("g");
+      float b = col.getFloat("b");
+      float a = col.getFloat("a");
+
+      laserColor = color(r, g, b, a);
+    } else {
+      laserColor = color(255, 255, 255);
+    }
+
+    if (!colors.isNull("textColor")) {
+      JSONObject col = colors.getJSONObject("textColor");
+
+      float r = col.getFloat("r");
+      float g = col.getFloat("g");
+      float b = col.getFloat("b");
+      float a = col.getFloat("a");
+
+      textColor = color(r, g, b, a);
+    } else {
+      textColor = color(255, 255, 255);
+    }
   }
   catch(Exception e) {
     bgColor = color(15, 1, 9);
@@ -13,72 +79,8 @@ void loadColorScheme() {
     textColor = color(255, 255, 255);
 
     saveColorScheme();
-    return;
-  }
-
-  if (!colors.isNull("backgroundColor")) {
-    JSONObject col = colors.getJSONObject("backgroundColor");
-
-    float r = col.getFloat("r");
-    float g = col.getFloat("g");
-    float b = col.getFloat("b");
-    float a = col.getFloat("a");
-
-    bgColor = color(r, g, b, a);
-  } else {
-    bgColor = color(15, 1, 9);
-  }
-
-  if (!colors.isNull("shipColor")) {
-    JSONObject col = colors.getJSONObject("shipColor");
-
-    float r = col.getFloat("r");
-    float g = col.getFloat("g");
-    float b = col.getFloat("b");
-    float a = col.getFloat("a");
-
-    shipColor = color(r, g, b, a);
-  } else {
-    shipColor = color(255, 255, 255);
-  }
-
-  if (!colors.isNull("asteroidColor")) {
-    JSONObject col = colors.getJSONObject("asteroidColor");
-
-    float r = col.getFloat("r");
-    float g = col.getFloat("g");
-    float b = col.getFloat("b");
-    float a = col.getFloat("a");
-
-    asteroidColor = color(r, g, b, a);
-  } else {
-    asteroidColor = color(255, 255, 255);
-  }
-
-  if (!colors.isNull("laserColor")) {
-    JSONObject col = colors.getJSONObject("laserColor");
-
-    float r = col.getFloat("r");
-    float g = col.getFloat("g");
-    float b = col.getFloat("b");
-    float a = col.getFloat("a");
-
-    laserColor = color(r, g, b, a);
-  } else {
-    laserColor = color(255, 255, 255);
-  }
-
-  if (!colors.isNull("textColor")) {
-    JSONObject col = colors.getJSONObject("textColor");
-
-    float r = col.getFloat("r");
-    float g = col.getFloat("g");
-    float b = col.getFloat("b");
-    float a = col.getFloat("a");
-
-    textColor = color(r, g, b, a);
-  } else {
-    textColor = color(255, 255, 255);
+    e.printStackTrace();
+    exit();
   }
 }
 
@@ -126,17 +128,17 @@ void saveColorScheme() {
 
   o.setJSONObject("textColor", txt);
 
-  saveJSONObject(o, "data/colors.json");
+  saveJSONObject(o, "data/config/colors.json");
 }
 
 void loadTopFive() {
-  
+
   for (int i = 0; i< 5; i++)
   {
     topFive[i] = new PlayerEntry("<Slot Free>", 1, 0);
   }
-  
-  JSONArray arr = loadJSONArray("players.json");
+
+  JSONArray arr = loadJSONArray("highscores/players.json");
 
   for (int i = 0; i < constrain(arr.size(), 0, 5); i++) {
     JSONObject o = arr.getJSONObject(i);
@@ -154,7 +156,7 @@ void saveTopFive() {
   for (int i = 0; i < topFive.length; i++)
     arr.setJSONObject(i, topFive[i].toJSON());
 
-  saveJSONArray(arr, "data/players.json");
+  saveJSONArray(arr, "data/highscores/players.json");
 }
 
 void checkTopFive() {
@@ -188,6 +190,61 @@ void checkTopFive() {
 }
 
 void loadConfig() {
-  
-  
+  JSONObject conf = null;
+
+  try {
+    conf = loadJSONObject("config/graphics.json");
+
+    if (!conf.isNull("shaders")) {
+      JSONObject shaders = conf.getJSONObject("shaders");
+
+      if (!shaders.isNull("blur"))
+      {
+        blurShader = shaders.getBoolean("blur");
+      } else throw new Exception("Can't load Config");
+      
+      if (!shaders.isNull("crt"))
+      {
+        crtShader = shaders.getBoolean("crt");
+      } else throw new Exception("Can't load Config");
+      
+      if (!shaders.isNull("scanlines"))
+      {
+        scanlineShader = shaders.getBoolean("scanlines");
+      } else throw new Exception("Can't load Config");
+      
+    } else {
+      throw new Exception("Can't load Config");
+    }
+    
+    if(!conf.isNull("smoothingLevel"))
+    {
+      pSmoothLevel = conf.getInt("smoothingLevel");
+    } else {
+       throw new Exception("Can't load smoothing Level"); 
+    }
+  } 
+  catch(Exception e) {
+    blurShader = true;
+    crtShader = true;
+    scanlineShader = true;
+    pSmoothLevel = 16;
+    saveConfig();
+    e.printStackTrace();
+    exit();
+  }
+}
+
+void saveConfig() {
+  JSONObject o = new JSONObject();
+
+  JSONObject shaders = new JSONObject();
+  shaders.setBoolean("blur", blurShader);
+  shaders.setBoolean("crt", crtShader);
+  shaders.setBoolean("scanlines", scanlineShader);
+  o.setJSONObject("shaders", shaders);
+
+  o.setInt("smoothingLevel", pSmoothLevel);
+
+  saveJSONObject(o, "data/config/graphics.json");
 }

@@ -26,6 +26,8 @@ boolean blurShader = true;
 boolean scanlineShader = true;
 boolean crtShader = true;
 
+int pSmoothLevel = 8;
+
 int lastTime = 0;
 int delta = 0;
 
@@ -41,19 +43,23 @@ void reset() {
 }
 
 void setup() {
-  
-  for(String s : args){
-     if(s.equalsIgnoreCase("DoTravisDebug")){
-       loopOnce = true;
-       scanlineShader = false;
-       blurShader = false;
-       crtShader = false;
-       
-       System.out.println("Entered Debug Mode for Travis!");
-     }
-  }
-  
-  fullScreen(P2D);
+
+  loadConfig();
+
+  if (args != null && args.length != 0)
+    for (String s : args) {
+      if (s.equalsIgnoreCase("DoTravisDebug")) {
+        loopOnce = true;
+        scanlineShader = false;
+        blurShader = false;
+        crtShader = false;
+
+        System.out.println("Entered Debug Mode for Travis!");
+      }
+    }
+
+  fullScreen(P2D, SPAN);
+
   frameRate(60);
 
   src = createGraphics(width, height, P2D);
@@ -68,21 +74,21 @@ void setup() {
     pass2 = createGraphics(width, height, P2D);
     pass2.noSmooth();
 
-    blur = loadShader("blur.glsl");
+    blur = loadShader("shaders/blur.glsl");
     blur.set("blurSize", 10);
     blur.set("sigma", 5f);
   }
-  if (crtShader){
-    crt = loadShader("crt.glsl");
-    endStage2 = createGraphics(width, height, P2D); 
+  if (crtShader) {
+    crt = loadShader("shaders/crt.glsl");
+    endStage2 = createGraphics(width, height, P2D);
   }
 
   textG = createGraphics(width, height, P2D);
 
   surface.setResizable(false);
 
-  fontPixel = createFont("VCR_OSD_MONO_1.001.ttf", 32);
-  fontAtari = createFont("old.TTF", 32);
+  fontPixel = createFont("fonts/VCR_OSD_MONO_1.001.ttf", 32);
+  fontAtari = createFont("fonts/old.TTF", 32);
 
   loadColorScheme();
 
@@ -90,7 +96,11 @@ void setup() {
 
   loadTopFive();
 
-  src.smooth(8);
+  if(pSmoothLevel > 0){
+    src.smooth(pSmoothLevel);
+  } else {
+     src.noSmooth(); 
+  }
 
   //scanlines
   if (scanlineShader) {
@@ -129,7 +139,7 @@ void draw() {
     textG.textSize(24);
     textG.textFont(fontPixel);
     textG.textAlign(LEFT);
-    textG.text("Stage: " + you.stage + " Score: " + you.score, 0, height);
+    textG.text("Stage: " + you.stage + " Score: " + you.score, 10, height-10);
     textG.endDraw();
 
     for (int i = asteroids.size() - 1; i >= 0; i--) {
@@ -191,7 +201,7 @@ void draw() {
 
     endStage1.beginDraw();
     endStage1.background(0);
-    
+
     endStage1.image(src, 0, 0);
 
     endStage1.blendMode(ADD);
@@ -225,24 +235,23 @@ void draw() {
     }
 
     endStage1.endDraw();
-    
-    if(crtShader){
+
+    if (crtShader) {
       endStage2.beginDraw();
       endStage2.shader(crt);
-      
+
       endStage2.image(endStage1, 0, 0);
-      
+
       //shader vars
       crt.set("iResolution", new PVector(width, height, 1));
       crt.set("iGlobalTime", millis()/1000);
       crt.set("iChannel0", endStage1); 
       endStage2.endDraw();
-    
+
       image(endStage2, 0, 0);
     } else {
       image(endStage1, 0, 0);
     }
-  
   } else {
     background(0);
     src.beginDraw();
@@ -289,33 +298,33 @@ void draw() {
 
 
     endStage1.beginDraw();
-    
+
     endStage1.image(src, 0, 0);
     if (scanlineShader) {
       endStage1.blendMode(BLEND);
       endStage1.image(scanlines, 0, 0);
     }
     endStage1.endDraw();
-    
-    if(crtShader){
+
+    if (crtShader) {
       endStage2.beginDraw();
       endStage2.shader(crt);
-      
+
       endStage2.image(endStage1, 0, 0);
-      
+
       //shader vars
       crt.set("iResolution", new PVector(width, height, 1));
       crt.set("iGlobalTime", millis()/1000);
       crt.set("iChannel0", endStage1); 
       endStage2.endDraw();
-    
+
       image(endStage2, 0, 0);
     } else {
       image(endStage1, 0, 0);
     }
   }
 
-  if(loopOnce){
+  if (loopOnce) {
     noLoop();
     exit();
   }

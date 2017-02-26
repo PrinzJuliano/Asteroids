@@ -1,3 +1,5 @@
+//Adapted from:
+//https://www.shadertoy.com/view/Ms23DR
 uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform float     iGlobalTime;           // shader playback time (in seconds)
 uniform sampler2D iChannel0;          	// input channel. XX = 2D/Cube
@@ -49,14 +51,12 @@ void main( )
 	//col = col*vec3( 0.4+0.7*s) ;
 
     col *= 1.0+0.01*sin(110.0*iGlobalTime);
-	//if (uv.x < 0.0 || uv.x > 1.0)
-	//	col *= 0.0;
-	//if (uv.y < 0.0 || uv.y > 1.0)
-	//	col *= 0.0;
+	if (uv.x < 0.0 || uv.x > 1.0)
+		col *= 0.0;
+	if (uv.y < 0.0 || uv.y > 1.0)
+		col *= 0.0;
 	
-	//col*=1.0-0.65*vec3(clamp((mod(fragCoord.x, 2.0)-1.0)*2.0,0.0,1.0));
 	
-    float comp = smoothstep( 0.1, 0.9, sin(iGlobalTime) );
  
 	
     gl_FragColor = vec4(col,1.0);
