@@ -12,6 +12,7 @@ color bgColor, shipColor, laserColor, asteroidColor, textColor;
 
 boolean inGame = true;
 boolean shownModal = false;
+boolean loopOnce = false;
 
 PFont fontAtari;
 PFont fontPixel;
@@ -91,6 +92,13 @@ void setup() {
       scanlines.line(0, y, width, y);
     }
     scanlines.endDraw();
+  }
+  
+  for(String s : args){
+     if(s.equalsIgnoreCase("DoTravisDebug")){
+       loopOnce = true;
+       System.out.println("Entered Debug Mode for Travis!");
+     }
   }
   
 }
@@ -301,6 +309,11 @@ void draw() {
     } else {
       image(endStage1, 0, 0);
     }
+  }
+
+  if(loopOnce){
+    noLoop();
+    exit();
   }
 
   lastTime = millis();
