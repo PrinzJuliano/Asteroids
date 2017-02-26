@@ -1,4 +1,13 @@
 language: java
 jdk:
   - oraclejdk8
-script: echo "hi"
+sudo: true
+addons:
+  apt:
+    packages:
+        - wget
+install:
+    - wget -O processing.tgz http://download.processing.org/processing-3.3-linux64.tgz
+    - tar xvfz processing.tgz 
+    - sudo chmod +x processing-3.3/processing-java
+script: ./processing-3.3/processing-java --sketch=Asteroids --run

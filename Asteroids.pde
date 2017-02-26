@@ -92,6 +92,7 @@ void setup() {
     }
     scanlines.endDraw();
   }
+  
 }
 
 void generateNew() {
