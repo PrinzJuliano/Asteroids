@@ -41,6 +41,18 @@ void reset() {
 }
 
 void setup() {
+  
+  for(String s : args){
+     if(s.equalsIgnoreCase("DoTravisDebug")){
+       loopOnce = true;
+       scanlineShader = false;
+       blurShader = false;
+       crtShader = false;
+       
+       System.out.println("Entered Debug Mode for Travis!");
+     }
+  }
+  
   fullScreen(P2D);
   frameRate(60);
 
@@ -93,14 +105,6 @@ void setup() {
     }
     scanlines.endDraw();
   }
-  
-  for(String s : args){
-     if(s.equalsIgnoreCase("DoTravisDebug")){
-       loopOnce = true;
-       System.out.println("Entered Debug Mode for Travis!");
-     }
-  }
-  
 }
 
 void generateNew() {
