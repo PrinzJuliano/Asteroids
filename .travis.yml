@@ -10,10 +10,10 @@ addons:
         - libxrender1
         - libxtst6
         - libxi6 
-before-install:
+
+install:
     - sudo Xvfb :1 -screen 0 1024x768x24
     - export DISPLAY=":1"
-install:
     - wget -O processing.tgz http://download.processing.org/processing-3.3-linux64.tgz
     - tar xvfz processing.tgz 
     - sudo chmod +x processing-3.3/processing-java
