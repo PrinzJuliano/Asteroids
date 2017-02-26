@@ -1,5 +1,7 @@
 # Asteroids
 
+[![Build Status](https://travis-ci.org/PrinzJuliano/Asteroids.svg?branch=master)](https://travis-ci.org/PrinzJuliano/Asteroids)
+
 ## What is this?
 
 Have you ever played [Asteroids](https://en.wikipedia.org/wiki/Asteroids_(video_game)) or seen it as pop culture reference?
