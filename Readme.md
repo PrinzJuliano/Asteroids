@@ -17,4 +17,4 @@ These are aspects of it:
 
 ## Screenshots
 
-![Image of an old Screen](http://i.imgur.com/qHsKCy6.png)
+![Another Image](http://prntscr.com/ee30o2)
