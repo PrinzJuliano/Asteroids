@@ -1,0 +1,5 @@
+language: java
+jdk:
+  - oraclejdk8
+
+script: echo "This is totally legit and works all the time"
