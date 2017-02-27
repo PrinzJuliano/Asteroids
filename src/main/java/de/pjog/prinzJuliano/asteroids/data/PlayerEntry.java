@@ -1,27 +1,24 @@
-package de.pjog.prinzJuliano.asteroids;
+package de.pjog.prinzJuliano.asteroids.data;
 
 import processing.data.JSONObject;
 
 public class PlayerEntry {
 
-	MainClass p;
+	public String username;
+	public int stage;
+	public int score;
+	public int lives = 3;
 
-	String username;
-	int stage;
-	int score;
-
-	PlayerEntry(MainClass p) {
-		this.p = p;
+	public PlayerEntry() {
 	}
 
-	PlayerEntry(MainClass p, String u, int stage, int score) {
-		this(p);
+	public PlayerEntry(String u, int stage, int score) {
 		this.username = u;
 		this.stage = stage;
 		this.score = score;
 	}
 
-	JSONObject toJSON() {
+	public JSONObject toJSON() {
 		JSONObject o = new JSONObject();
 		o.setString("username", username);
 		o.setInt("stage", stage);
@@ -29,7 +26,7 @@ public class PlayerEntry {
 		return o;
 	}
 
-	void fromJSON(JSONObject o) {
+	public void fromJSON(JSONObject o) {
 
 		if (!o.isNull("username"))
 			username = o.getString("username");
