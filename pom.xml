@@ -4,7 +4,7 @@
 
 	<groupId>de.pjog.prinzJuliano</groupId>
 	<artifactId>asteroids</artifactId>
-	<version>Alpha-1.0</version>
+	<version>Alpha-1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>Asteroids</name>
