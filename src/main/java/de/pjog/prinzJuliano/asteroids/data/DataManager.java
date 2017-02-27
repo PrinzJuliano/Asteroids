@@ -1,5 +1,6 @@
-package de.pjog.prinzJuliano.asteroids;
+package de.pjog.prinzJuliano.asteroids.data;
 
+import de.pjog.prinzJuliano.asteroids.MainClass;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -23,19 +24,6 @@ public class DataManager {
 				p.bgColor = p.color(r, g, b, a);
 			} else {
 				p.bgColor = p.color(15, 1, 9);
-			}
-
-			if (!colors.isNull("shipColor")) {
-				JSONObject col = colors.getJSONObject("shipColor");
-
-				float r = col.getFloat("r");
-				float g = col.getFloat("g");
-				float b = col.getFloat("b");
-				float a = col.getFloat("a");
-
-				p.shipColor = p.color(r, g, b, a);
-			} else {
-				p.shipColor = p.color(255, 255, 255);
 			}
 
 			if (!colors.isNull("asteroidColor")) {
@@ -63,6 +51,19 @@ public class DataManager {
 			} else {
 				p.laserColor = p.color(255, 255, 255);
 			}
+			
+			if (!colors.isNull("vignetteColor")) {
+				JSONObject col = colors.getJSONObject("vignetteColor");
+
+				float r = col.getFloat("r");
+				float g = col.getFloat("g");
+				float b = col.getFloat("b");
+				float a = col.getFloat("a");
+
+				p.vignetteColor = p.color(r, g, b, a);
+			} else {
+				p.vignetteColor = p.color(0);
+			}
 
 			if (!colors.isNull("textColor")) {
 				JSONObject col = colors.getJSONObject("textColor");
@@ -76,17 +77,29 @@ public class DataManager {
 			} else {
 				p.textColor = p.color(255, 255, 255);
 			}
+			
+			if (!colors.isNull("shipThrusterColor")) {
+				JSONObject col = colors.getJSONObject("shipThrusterColor");
+
+				float r = col.getFloat("r");
+				float g = col.getFloat("g");
+				float b = col.getFloat("b");
+				float a = col.getFloat("a");
+
+				p.shipThrusterColor = p.color(r, g, b, a);
+			} else {
+				p.shipThrusterColor = p.color(255, 255, 0);
+			}
+			
 		} catch (Exception e) {
 			p.bgColor = p.color(15, 1, 9);
-			p.shipColor = p.color(255, 255, 255);
 			p.laserColor = p.color(255, 255, 255);
 			p.asteroidColor = p.color(255, 255, 255);
 			p.textColor = p.color(255, 255, 255);
-
-			saveColorScheme(p);
-			e.printStackTrace();
-			p.exit();
+			p.vignetteColor = p.color(0);
+			p.shipThrusterColor = p.color(255, 255, 0);
 		}
+		saveColorScheme(p);
 	}
 
 	public static void saveColorScheme(MainClass p) {
@@ -101,14 +114,6 @@ public class DataManager {
 
 		o.setJSONObject("backgroundColor", bg);
 
-		JSONObject sh = new JSONObject();
-		sh.setFloat("r", p.red(p.shipColor));
-		sh.setFloat("g", p.green(p.shipColor));
-		sh.setFloat("b", p.blue(p.shipColor));
-		sh.setFloat("a", p.alpha(p.shipColor));
-
-		o.setJSONObject("shipColor", sh);
-
 		JSONObject as = new JSONObject();
 		as.setFloat("r", p.red(p.asteroidColor));
 		as.setFloat("g", p.green(p.asteroidColor));
@@ -116,6 +121,14 @@ public class DataManager {
 		as.setFloat("a", p.alpha(p.asteroidColor));
 
 		o.setJSONObject("asteroidColor", as);
+
+		JSONObject vig = new JSONObject();
+		vig.setFloat("r", p.red(p.vignetteColor));
+		vig.setFloat("g", p.green(p.vignetteColor));
+		vig.setFloat("b", p.blue(p.vignetteColor));
+		vig.setFloat("a", p.alpha(p.vignetteColor));
+
+		o.setJSONObject("vignetteColor", vig);
 
 		JSONObject ls = new JSONObject();
 		ls.setFloat("r", p.red(p.laserColor));
@@ -132,6 +145,14 @@ public class DataManager {
 		txt.setFloat("a", p.alpha(p.textColor));
 
 		o.setJSONObject("textColor", txt);
+		
+		JSONObject stc = new JSONObject();
+		stc.setFloat("r", p.red(p.shipThrusterColor));
+		stc.setFloat("g", p.green(p.shipThrusterColor));
+		stc.setFloat("b", p.blue(p.shipThrusterColor));
+		stc.setFloat("a", p.alpha(p.shipThrusterColor));
+
+		o.setJSONObject("shipThrusterColor", stc);
 
 		p.saveJSONObject(o, "data/config/colors.json");
 	}
@@ -139,7 +160,7 @@ public class DataManager {
 	public static void loadTopFive(MainClass p) {
 
 		for (int i = 0; i < 5; i++) {
-			topFive[i] = new PlayerEntry(p, "<Slot Free>", 1, 0);
+			topFive[i] = new PlayerEntry("<Slot Free>", 1, 0);
 		}
 
 		JSONArray arr = null;
@@ -150,7 +171,7 @@ public class DataManager {
 			for (int i = 0; i < PApplet.constrain(arr.size(), 0, 5); i++) {
 				JSONObject o = arr.getJSONObject(i);
 
-				PlayerEntry e = new PlayerEntry(p);
+				PlayerEntry e = new PlayerEntry();
 				e.fromJSON(o);
 
 				topFive[i] = e;
@@ -158,7 +179,6 @@ public class DataManager {
 
 		} catch (Exception e) {
 			saveTopFive(p);
-			e.printStackTrace();
 		}
 
 	}
@@ -241,8 +261,6 @@ public class DataManager {
 			p.scanlineShader = true;
 			p.pSmoothLevel = 16;
 			saveConfig(p);
-			e.printStackTrace();
-			p.exit();
 		}
 	}
 
