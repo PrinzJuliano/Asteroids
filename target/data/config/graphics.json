@@ -1,0 +1,8 @@
+{
+  "shaders": {
+    "crt": true,
+    "scanlines": true,
+    "blur": true
+  },
+  "smoothingLevel": 16
+}
