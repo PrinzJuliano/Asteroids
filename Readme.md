@@ -17,4 +17,4 @@ These are aspects of it:
 
 ## Screenshots
 
-![Another Image](http://prntscr.com/ee30o2)
+![Another Image](http://image.prntscr.com/image/0d1effc649914647b9d7ff32810f3d7f.png)
