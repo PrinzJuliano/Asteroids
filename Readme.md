@@ -1,7 +1,5 @@
 # Asteroids
 
-[![Build Status](https://travis-ci.org/PrinzJuliano/Asteroids.svg?branch=master)](https://travis-ci.org/PrinzJuliano/Asteroids)
-[![Chat On Gitter](https://badges.gitter.im/owner/repo.png)](https://gitter.im/PrinzJuliano-Asteroids/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 ## What is this?
 
 Have you ever played [Asteroids](https://en.wikipedia.org/wiki/Asteroids_(video_game)) or seen it as pop culture reference?
